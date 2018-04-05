@@ -1,10 +1,12 @@
 require('dotenv').config()
 const { Pool, Query } = require('pg')
 const tilebelt = require('@mapbox/tilebelt')
+const turf = require('@turf/turf')
 const z = parseInt(process.env.Z)
 const x = parseInt(process.env.X)
 const y = parseInt(process.env.Y)
 const tables = process.env.TABLES.split(' ')
+const deletes = process.env.DELETES.split(' ')
 const geom = process.env.GEOM
 const pool = new Pool({max: 50})
 const bbox = tilebelt.tileToBBOX([x, y, z])
@@ -17,14 +19,24 @@ const cut = async function (layer) {
     `ST_MakePoint(${bbox[2]}, ${bbox[3]}))`
   await client.query(new Query(q))
     .on('row', row => {
+      let g = row.g
+      if (g.type === 'Point') {
+      } else {
+        g = turf.bboxClip(g, bbox).geometry
+      }
       let f = {
         type: 'Feature',
-        geometry: row.g,
-        tippecanoe: {layer: layer}
+        geometry: g,
+        tippecanoe: {layer: row.g.type.toLowerCase().replace('multi', '')}
+        //tippecanoe: {layer: layer}
       }
       delete row.g
       delete row[geom]
-      f.properties = row
+      for(const k of deletes) {
+        delete row[k]
+      }
+      //f.properties = row
+      f.properties = {layer: layer}
       console.log(JSON.stringify(f))
     })
     .on('end', () => {

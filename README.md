@@ -23,9 +23,15 @@ Z=5
 X=18
 Y=15
 TABLES=osm_planet_buildings_general osm_planet_places...
+DELETES=objectid type...
 ```
 TABLES is a space-delimited list of PostGIS table names.
+DELETES is a list of property names to be deleted.
 
 ## Peripheral tools
 ### stat.js
 make statistics on a ndjson file.
+### schema.rb
+create schema document from PostGIS.
+### tables.rb
+create a list of table names at PostGIS.
