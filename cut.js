@@ -8,10 +8,9 @@ const tables = process.env.TABLES.split(' ')
 
 const main = async function() {
   const pool = new Pool()
+  const bbox = tilebelt.tileToBBOX([x, y, z])
   for(const layer of tables) {
-    console.error(layer)
     const client = await pool.connect()
-    const bbox = tilebelt.tileToBBOX([x, y, z])
     let q = `SELECT ST_AsGeoJSON(geomtype)::json AS g, * FROM ${layer}`
     q += ` WHERE geomtype && ST_MakeBox2D(` + 
       `ST_MakePoint(${bbox[0]}, ${bbox[1]}), ` + 
