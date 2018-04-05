@@ -1,0 +1,24 @@
+{
+  "name": "cut",
+  "version": "1.0.0",
+  "description": "Cut NDJSON out from PostGIS database",
+  "main": "cut.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hfu/cut.git"
+  },
+  "author": "",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/hfu/cut/issues"
+  },
+  "homepage": "https://github.com/hfu/cut#readme",
+  "dependencies": {
+    "@mapbox/tilebelt": "^1.0.1",
+    "dotenv": "^5.0.1",
+    "pg": "^7.4.1"
+  }
+}
